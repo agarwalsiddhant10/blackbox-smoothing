@@ -3,7 +3,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, datasets
 from torchvision.datasets.utils import check_integrity
 from typing import *
-from zipdata import ZipData
+from .zipdata import ZipData
 
 import bisect 
 import numpy as np

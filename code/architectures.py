@@ -1,11 +1,12 @@
-from archs import *
-from archs.dncnn import DnCNN
-from archs.cifar_resnet import resnet as resnet_cifar
-from archs.memnet import MemNet
-from archs.wrn import WideResNet
-from datasets import get_normalize_layer, get_input_center_layer
+from .archs import *
+from .archs.dncnn import DnCNN
+from .archs.cifar_resnet import resnet as resnet_cifar
+from .archs.memnet import MemNet
+from .archs.wrn import WideResNet
+from .datasets import get_normalize_layer, get_input_center_layer
 from torch.nn.functional import interpolate
 from torchvision.models.resnet import resnet18, resnet34, resnet50
+from torchvision.models.vgg import vgg16
 
 import torch
 import torch.backends.cudnn as cudnn
@@ -15,6 +16,7 @@ IMAGENET_CLASSIFIERS = [
                         'resnet18', 
                         'resnet34', 
                         'resnet50',
+                        'vgg16',
                         ]
 
 CIFAR10_CLASSIFIERS = [
@@ -48,6 +50,10 @@ def get_architecture(arch: str, dataset: str, pytorch_pretrained: bool=False) ->
         cudnn.benchmark = True
     elif arch == "resnet50" and dataset == "imagenet":
         model = torch.nn.DataParallel(resnet50(pretrained=pytorch_pretrained)).cuda()
+        cudnn.benchmark = True
+
+    elif arch == "vgg16" and dataset == "imagenet":
+        model = torch.nn.DataParallel(vgg16(pretrained=pytorch_pretrained)).cuda()
         cudnn.benchmark = True
 
     ## Cifar classifiers
